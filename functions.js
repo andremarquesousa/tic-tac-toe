@@ -30,52 +30,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 ctx.stroke();
             }
         },
-        circle: function(x, y) {
+        circle: function(item) {
+            var item = item,
+                radius = ((item.right - item.left) * 0.7) / 2;
+
             ctx.lineWidth = 4;
             ctx.lineCap = 'round';
             ctx.strokeStyle = '#2AF230';
-
-            for (var i = 0; i < positions.length; i++) {
-                var item = positions[i];
-
-                if ((x >= item.left && x <= item.right) && (y >= item.top && y <=item.bottom)) {
-                    if (item.selected == false) {
-                        ctx.beginPath();
-                        ctx.arc(item.right - ((item.right - item.left) / 2), item.bottom - ((item.bottom - item.top) / 2), 50, 0, 2 * Math.PI);
-                        ctx.stroke();
-                        item.selected = true;
-                    } else {
-                        alert('já marcado');
-                    }
-                }
-            }
+            ctx.beginPath();
+            ctx.arc(item.right - ((item.right - item.left) / 2), item.bottom - ((item.bottom - item.top) / 2), radius, 0, 2 * Math.PI);
+            ctx.stroke();
+            item.selected = true;
         },
-        simbolX: function(x, y) {
-            var padding = 25;
-            ctx.lineWidth = 4;
+        simbolX: function(item) {
+            var padding = 30,
+                item = item;
+
+            ctx.lineWidth = 8;
             ctx.lineCap = 'round';
             ctx.strokeStyle = '#E82C2C';
+            ctx.beginPath();
+            ctx.moveTo(item.left + padding, item.top + padding);
+            ctx.lineTo(item.right - padding, item.bottom - padding);
+            ctx.stroke();
 
-            for (var i = 0; i < positions.length; i++) {
-                var item = positions[i];
-
-                if ((x >= item.left && x <= item.right) && (y >= item.top && y <=item.bottom)) {
-                    if (item.selected == false) {
-                        ctx.beginPath();
-                        ctx.moveTo(item.left + padding, item.top + padding);
-                        ctx.lineTo(item.right - padding, item.bottom - padding);
-                        ctx.stroke();
-
-                        ctx.beginPath();
-                        ctx.moveTo(item.right - padding, item.top + padding);
-                        ctx.lineTo(item.left + padding, item.bottom - padding);
-                        ctx.stroke();
-                        item.selected = true;
-                    } else {
-                        alert('já marcado');
-                    }
-                }
-            }
+            ctx.beginPath();
+            ctx.moveTo(item.right - padding, item.top + padding);
+            ctx.lineTo(item.left + padding, item.bottom - padding);
+            ctx.stroke();
+            item.selected = true;
         }
     }
 
@@ -101,15 +84,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    var verifyItem = function(x, y){
+        for (var i = 0; i < positions.length; i++) {
+                var item = positions[i];
+
+                if ((x >= item.left && x <= item.right) && (y >= item.top && y <=item.bottom)) {
+                    if (item.selected == false) {
+                        if (player1) {
+                            draw.circle(item);
+                            player1 = false;
+                        } else {
+                            draw.simbolX(item);
+                            player1 = true;
+                        }
+                    } else {
+                    alert('já marcado');
+                }
+            }
+        };
+    }
+
     /*EVENTS*/
     canvas.addEventListener('click', function(e){
-        if (player1) {
-            draw.circle(e.offsetX, e.offsetY);
-            player1 = false;
-        } else {
-            draw.simbolX(e.offsetX, e.offsetY);
-            player1 = true;
-        }
+        verifyItem(e.offsetX, e.offsetY);
     })
 
     createSquares();
