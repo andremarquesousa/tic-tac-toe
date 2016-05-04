@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
         linesNumber = 3,
         columnsNumber = 3,
         positions = [],
+        mapPositions = [
+            [false, false, false],
+            [false, false, false],
+            [false, false, false]
+        ],
         player = 'circle';
 
     canvas.width = width;
@@ -70,14 +75,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (var i = 1; i <= totalBlocks; i++) {
             if (i % 3 === 0) {
+                positions.push([]);
+
                 for (var b = 0; b < linesNumber; b++) {
-                    positions.push({
+                    positions[line].push({
                         left: widthSquare * b,
                         right: (widthSquare * b) + widthSquare,
                         top: heightSquare * line,
                         bottom: (heightSquare * line) + heightSquare,
                         selected: false
-                    })       
+                    })
                 }
                 line++
             }
@@ -85,7 +92,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var clearCanvas = function(){
-        positions = [],
+        positions = [];
+        mapPositions = [
+            [false, false, false],
+            [false, false, false],
+            [false, false, false]
+        ];
         player = 'circle';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         createSquares();
@@ -94,107 +106,94 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var verifyItem = function(x, y){
         for (var i = 0; i < positions.length; i++) {
-                var item = positions[i];
+            var currentLine = positions[i];
+
+            for (var c = 0; c < currentLine.length; c++) {
+                var item = currentLine[c];
 
                 if ((x >= item.left && x <= item.right) && (y >= item.top && y <=item.bottom)) {
                     if (item.selected == false) {
                         if (player == 'circle') {
                             draw.circle(item);
                             item.type = player;
+                            mapPositions[i][c] = player;
                             player = 'symbolX';
                         } else {
                             draw.symbolX(item);
                             item.type = player;
+                            mapPositions[i][c] = player;
                             player = 'circle';
                         }
                     } else {
-                    alert('já marcado');
+                        alert('já marcado');
+                    }
                 }
             }
         };
     }
 
+    var win = function() {
+        alert('ganhou');
+    }
 
-    /*GAME LOGIC*/
-    var verifyWin = function() {
-        if (positions[0].selected && positions[1].selected && positions[2].selected) {
-            if (positions[0].type == 'circle' && positions[1].type == 'circle' && positions[2].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[0].type == 'symbolX' && positions[1].type == 'symbolX' && positions[2].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        } 
-        if (positions[3].selected && positions[4].selected && positions[5].selected) {
-            if (positions[3].type == 'circle' && positions[4].type == 'circle' && positions[5].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[3].type == 'symbolX' && positions[4].type == 'symbolX' && positions[5].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
+    var checkValues = function(array) {
+        var removeFalse = array.filter(function(i) {
+            return i !== false;
+        });
+
+        if (removeFalse.length < 3) {
+            return false;
         }
-        if (positions[6].selected && positions[7].selected && positions[8].selected) {
-            if (positions[6].type == 'circle' && positions[7].type == 'circle' && positions[8].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[6].type == 'symbolX' && positions[7].type == 'symbolX' && positions[8].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        }
-        if (positions[0].selected && positions[3].selected && positions[6].selected) {
-            if (positions[0].type == 'circle' && positions[3].type == 'circle' && positions[6].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[0].type == 'symbolX' && positions[3].type == 'symbolX' && positions[6].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        }
-        if (positions[1].selected && positions[4].selected && positions[7].selected) {
-            if (positions[1].type == 'circle' && positions[4].type == 'circle' && positions[7].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[1].type == 'symbolX' && positions[4].type == 'symbolX' && positions[7].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        }
-        if (positions[2].selected && positions[5].selected && positions[8].selected) {
-            if (positions[2].type == 'circle' && positions[5].type == 'circle' && positions[8].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[2].type == 'symbolX' && positions[5].type == 'symbolX' && positions[8].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        }
-        if (positions[0].selected && positions[4].selected && positions[8].selected) {
-            if (positions[0].type == 'circle' && positions[4].type == 'circle' && positions[8].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[0].type == 'symbolX' && positions[4].type == 'symbolX' && positions[8].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
-        }
-        if (positions[2].selected && positions[4].selected && positions[6].selected) {
-            if (positions[2].type == 'circle' && positions[4].type == 'circle' && positions[6].type == 'circle') {
-                alert('GANHOU');
-                clearCanvas();
-            } else if (positions[2].type == 'symbolX' && positions[4].type == 'symbolX' && positions[6].type == 'symbolX') {
-                alert('GANHOU');
-                clearCanvas();
-            }
+
+        return array.filter(function(value, index, self) { 
+            return self.indexOf(value) === index;
+        }).length == 1;
+    }
+
+    var getRow = function(line) {
+        if (checkValues(line)) {
+            win();
         }
     }
+
+    var getColumn = function(column) {
+        var values = checkValues(column);
+    }
+
+    var getTransversal = function(i) {
+    }
+
+    var checkWin = function() {
+        for (var i = 0; i < linesNumber; i++) {
+            var column = [];
+            getRow(mapPositions[i]);
+
+            for (var c = 0; c < columnsNumber; c++) {
+                column.push(mapPositions[c][i]);
+            }
+            getColumn(column);
+        }
+    }
+
+    var fillGap = function(column, row, value) {
+        // muda o posicionamento
+        position[row][column] = value;
+
+        if (checkWin()){
+        //ganhou
+        }
+    }
+
+   /* var lastPlayer = false;
+
+    var = function getLastPlayer() {
+        // retornar 0 ou X
+    }*/
 
     /*EVENTS*/
     canvas.addEventListener('click', function(e){
         verifyItem(e.offsetX, e.offsetY);
-        verifyWin();
+        checkWin();
     })
 
     createSquares();
