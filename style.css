@@ -9,15 +9,37 @@
 body {
     background: #000;
 }
+button {
+    cursor: pointer;
+}
+.board
+, .message {
+    width: 400px;
+    margin: 40px auto 0;
+}
 .board {
     display: block;
     background: #fff;
-    width: 400px;
     height: 400px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
+}
+.message {
+    background: #5891E6;
+    display: none;
+    text-align: center;
+}
+.message.active {
+    display: block;
+}
+.message span {
+    display: none;
+    color: #fff;
+    font-size: 30px;  
+}
+.message span.active {
+    display: block;     
+}
+.message button {
+    display: inline-block;
+    background: #ccc;
+    margin: 20px 0 0;
 }

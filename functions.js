@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     var canvas = document.body.querySelector('.board'),
         ctx = canvas.getContext('2d'),
+        message = document.body.querySelector('.message'),
         width = parseInt(getComputedStyle(canvas).width),
         height = parseInt(getComputedStyle(canvas).height),
         linesNumber = 3,
@@ -102,6 +103,14 @@ document.addEventListener('DOMContentLoaded', function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         createSquares();
         draw.lines();
+
+        message
+            .classList
+            .remove('active');
+        message
+            .querySelector('span')
+            .classList
+            .remove('active');
     }
 
     var verifyItem = function(x, y){
@@ -133,7 +142,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var win = function() {
-        alert('ganhou');
+        message.classList.add('active');
+        message
+            .querySelector('span')
+            .classList
+            .remove('active');
+
+        message
+            .querySelector('span.win')
+            .classList
+            .add('active');
     }
 
     var checkValues = function(array) {
@@ -157,10 +175,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var getColumn = function(column) {
-        var values = checkValues(column);
+        if (checkValues(column)) {
+            win();
+        }
     }
 
     var getTransversal = function(i) {
+
     }
 
     var checkWin = function() {
@@ -194,6 +215,9 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.addEventListener('click', function(e){
         verifyItem(e.offsetX, e.offsetY);
         checkWin();
+    })
+    message.querySelector('button').addEventListener('click', function(e){
+        clearCanvas();
     })
 
     createSquares();
