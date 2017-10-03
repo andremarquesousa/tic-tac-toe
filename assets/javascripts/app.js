@@ -148,22 +148,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var showMessage = function() {
         message.classList.add('active');
-        message
-            .querySelector('span')
-            .classList
-            .remove('active');
     }
 
     var result = {
         win: function() {
-            var win = message.querySelector('.win');
+            var win = message.querySelector('.win'),
+                tied = message.querySelector('.tied');
 
-            console.log(winner);
+            
+                tied
+                    .classList
+                    .remove('active');
 
             if (winner == 'circle') {
                 win
                     .classList
-                    .remove('symbolX');
+                    .remove('symbolX', 'active');
 
                 win
                     .classList
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 win
                     .classList
-                    .remove('circle');
+                    .remove('circle', 'active');
 
                 win
                     .classList
@@ -181,8 +181,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         tied: function() {
-            message
-                .querySelector('.tied')
+            message.querySelector('.win')
+                .classList
+                .remove('symbolX', 'active', 'circle');
+
+            message.querySelector('.tied')
                 .classList
                 .add('active');
         }
@@ -193,8 +196,12 @@ document.addEventListener('DOMContentLoaded', function () {
             return i !== false;
         });
 
+        console.log(removeFalse.length);
+
         if (removeFalse.length < 3) {
             return false;
+        } else if (removeFalse.length == 9) {
+            return 'tied';
         }
 
         return array.filter(function(value, index, self) {
@@ -203,31 +210,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }).length == 1;
     }
 
-    var checkWin = function() {
-        var transversal = [];
+    var check = {
+        win: function() {
+            var transversal = [];
 
-        for (var i = 0; i < linesNumber; i++) {
-            var column = [];
+            for (var i = 0; i < linesNumber; i++) {
+                var column = [];
 
-            for (var c = 0; c < columnsNumber; c++) {
-                column.push(mapPositions[c][i]);
+                for (var c = 0; c < columnsNumber; c++) {
+                    column.push(mapPositions[c][i]);
 
-                if ((i == 0 && c == 0) || (i == 1 && c == 1) || (i == 2 && c == 2)) {
-                    transversal.push(mapPositions[i][c]);
+                    if ((i == 0 && c == 0) || (i == 1 && c == 1) || (i == 2 && c == 2)) {
+                        transversal.push(mapPositions[i][c]);
+                    }
+                }
+
+                if (checkValues(mapPositions[i])) {
+                    showMessage();
+                    result.win();
+                } else if (checkValues(column)) {
+                    showMessage();
+                    result.win();
+                } else if (checkValues(transversal)) {
+                    showMessage();
+                    result.win();
+                }
+            }
+        },
+        tied: function() {
+            var all = [];
+
+            for (var i = 0; i < linesNumber; i++) {
+                for (var c = 0; c < columnsNumber; c++) {
+                    all.push(mapPositions[i][c]);
                 }
             }
 
-            if (checkValues(mapPositions[i])) {
+            if (checkValues(all) == 'tied') {
                 showMessage();
-                result.win();
-            } else if (checkValues(column)) {
-                showMessage();
-                result.win();
-            } else if (checkValues(transversal)) {
-                showMessage();
-                result.win();
-            } else if (checkValues(column)) {
-
+                result.tied();
             }
         }
     }
@@ -235,7 +256,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /*EVENTS*/
     canvas.addEventListener('click', function(e){
         verifyItem(e.offsetX, e.offsetY);
-        checkWin();
+        check.win();
+        check.tied();
     })
     message.querySelector('button').addEventListener('click', function(e){
         clearCanvas();
