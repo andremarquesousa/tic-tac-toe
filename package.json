@@ -1,0 +1,26 @@
+{
+  "name": "ticTacToe",
+  "version": "1.0.0",
+  "description": "estudando canvas",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andremarquesousa/tic-tac-toe.git"
+  },
+  "author": "Andre Marques",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andremarquesousa/tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/andremarquesousa/tic-tac-toe#readme",
+  "devDependencies": {
+    "autoprefixer": "^7.1.4",
+    "gulp": "^3.9.1",
+    "gulp-postcss": "^7.0.0",
+    "gulp-webserver": "^0.9.1",
+    "precss": "^2.0.0"
+  }
+}

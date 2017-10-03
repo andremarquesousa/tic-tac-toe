@@ -1,0 +1,122 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    list-style: none;
+    text-decoration: none;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+.board, .message {
+    position: absolute;
+    right: 0;
+    width: 400px;
+}
+
+.board {
+    display: block;
+    background: #fff;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    bottom: 0;
+    margin: auto;
+    height: 400px;
+}
+
+.message {
+    background: #5891E6;
+    font-size: 24px;
+    text-align: center;
+    left: -999em;
+    top: 40px;
+    z-index: 2;
+    padding: 40px 20px 20px;
+    margin: 0 auto;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+    -webkit-transition: opacity 1s, visibility 0s 1s, left 0s 1s, -webkit-transform 1s;
+    transition: opacity 1s, visibility 0s 1s, left 0s 1s, -webkit-transform 1s;
+    transition: opacity 1s, visibility 0s 1s, left 0s 1s, transform 1s;
+    transition: opacity 1s, visibility 0s 1s, left 0s 1s, transform 1s, -webkit-transform 1s
+}
+
+.message.active {
+    left: 0;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    -webkit-transition: opacity 1s, visibility 0s 0s, left 0s 0s, -webkit-transform 1s;
+    transition: opacity 1s, visibility 0s 0s, left 0s 0s, -webkit-transform 1s;
+    transition: opacity 1s, visibility 0s 0s, left 0s 0s, transform 1s;
+    transition: opacity 1s, visibility 0s 0s, left 0s 0s, transform 1s, -webkit-transform 1s;
+}
+
+.message span {
+        display: none;
+        color: #fff;
+        font-size: 30px;
+        position: relative;
+}
+
+.message span.active {
+    display: block;
+}
+
+.message span.symbolX, .message span.circle {
+    padding: 50px 0 0;
+}
+
+.message span.symbolX:before, .message span.symbolX:after {
+    content: '';
+    background: #E82C2C;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 40px;
+    margin: 0 auto;
+    border-radius: 3px;
+}
+
+.message span.symbolX:before {
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+}
+
+.message span.symbolX:after {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+}
+
+.message span.circle:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: solid 2px #2AF230;
+    border-radius: 50%;
+}
+
+.message button {
+        background: #fff;
+        display: inline-block;
+        color: #5891E6;
+        height: 40px;
+        padding: 0 40px;
+        margin: 20px 0 0;
+        border-radius: 20px;
+}
